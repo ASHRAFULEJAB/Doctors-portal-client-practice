@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react'
+import AppionmentBanner from './AppionmentBanner/AppionmentBanner'
+import AvailableAppionment from './AvailableAppionment/AvailableAppionment'
 
 const Appionment = () => {
-    return (
-        <div>
-            
-        </div>
-    );
-};
+  const [selectDate, setSelectDate] = useState(new Date())
+  return (
+    <div>
+      <AppionmentBanner
+        selectDate={selectDate}
+        setSelectDate={setSelectDate}
+      ></AppionmentBanner>
+      <AvailableAppionment selectDate={selectDate}></AvailableAppionment>
+    </div>
+  )
+}
 
-export default Appionment;
+export default Appionment
