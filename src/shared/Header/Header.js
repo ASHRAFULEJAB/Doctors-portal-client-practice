@@ -1,7 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { DoctorContext } from '../../context/AuthProvider'
 
 const Header = () => {
+  const { user, userLogout } = useContext(DoctorContext)
+  const handleLogout = () => {
+    userLogout()
+      .then(() => {})
+      .catch((e) => console.log(e))
+  }
   const navItems = (
     <>
       <li>
@@ -13,15 +20,27 @@ const Header = () => {
       <li>
         <Link to='/appionment'>Appionment</Link>
       </li>
-      <li>
-        <Link to='/reviews'>Reviews</Link>
-      </li>
+
       <li>
         <Link to='/contact'>Contact Us</Link>
       </li>
-      <li>
-        <Link to='/login'>Log in</Link>
-      </li>
+      {user?.uid ? (
+        <>
+          <li>
+            <Link to='/reviews'>Reviews</Link>
+          </li>
+          <li>
+            <Link to='/dashboard'>DashBoard</Link>
+          </li>
+          <li>
+            <button onClick={handleLogout}>Log Out</button>
+          </li>
+        </>
+      ) : (
+        <li>
+          <Link to='/login'>Log in</Link>
+        </li>
+      )}
     </>
   )
   return (
