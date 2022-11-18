@@ -1,8 +1,10 @@
 import { format } from 'date-fns'
-import React from 'react'
+import React, { useContext } from 'react'
+import { DoctorContext } from '../../../context/AuthProvider'
 
-const BookingModal = ({ treatment, selectDate, setTreatment }) => {
-  const { name, slots } = treatment
+const BookingModal = ({ treatment, selectDate, setTreatment, refetch }) => {
+  const { user } = useContext(DoctorContext)
+  const { name: treatmentName, slots } = treatment
   const date = format(selectDate, 'PP')
   const handleBooking = (e) => {
     e.preventDefault()
@@ -13,14 +15,30 @@ const BookingModal = ({ treatment, selectDate, setTreatment }) => {
     const phone = form.phone.value
     const booking = {
       appionmentDate: date,
-      treatment:name,
+      treatment: treatmentName,
       patient: name,
       email,
       slot,
       phone,
     }
-    console.log(booking)
-    setTreatment(null)
+    fetch('http://localhost:5000/bookings', {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(booking),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        if (data.acknowledged) {
+          alert('Booking Done')
+          setTreatment(null)
+          refetch()
+        } else {
+          alert(data.message)
+        }
+      })
   }
   return (
     <>
@@ -33,7 +51,7 @@ const BookingModal = ({ treatment, selectDate, setTreatment }) => {
           >
             ✕
           </label>
-          <h3 className='text-lg font-bold'>{name}</h3>
+          <h3 className='text-lg font-bold'>{treatmentName}</h3>
           <form
             onSubmit={handleBooking}
             className='grid grid-cols-1 gap-5 mt-10'
@@ -54,18 +72,23 @@ const BookingModal = ({ treatment, selectDate, setTreatment }) => {
             <input
               type='text'
               name='name'
+              defaultValue={user?.displayName}
+              readOnly
               placeholder='Full Name'
               className='input input-bordered w-full '
             />
             <input
               type='email'
               name='email'
+              defaultValue={user?.email}
+              readOnly
               placeholder='Enter your email'
               className='input input-bordered w-full '
             />
             <input
               type='text'
               name='phone'
+              required
               placeholder='Enter your Phone'
               className='input input-bordered w-full '
             />
