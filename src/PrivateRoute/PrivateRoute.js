@@ -13,7 +13,7 @@ const PrivateRoute = ({ children }) => {
         bis_skin_checked='1'
       ></div>
     )
-  }
+  } 
   if (user) {
     return children
   }

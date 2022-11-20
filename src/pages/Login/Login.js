@@ -2,8 +2,8 @@ import React, { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { DoctorContext } from '../../context/AuthProvider'
-import toast from 'react-hot-toast'
 import { GoogleAuthProvider } from 'firebase/auth'
+import useToken from '../../hooks/useToken'
 
 const Login = () => {
   const {
@@ -18,6 +18,11 @@ const Login = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || '/'
+  const [loginUser, setLoginUser] = useState('')
+  const [token] = useToken(loginUser)
+  if (token) {
+    navigate(from, { replace: true })
+  }
 
   const handleLogin = (data) => {
     console.log(data)
@@ -25,7 +30,7 @@ const Login = () => {
       .then((result) => {
         const user = result.user
         alert('User Created')
-        navigate(from, { replace: true })
+        setLoginUser(data.email)
         console.log(user)
         setLoginError('')
       })

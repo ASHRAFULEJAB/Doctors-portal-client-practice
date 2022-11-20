@@ -1,7 +1,9 @@
 import React, { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { DoctorContext } from '../../context/AuthProvider'
+import useToken from '../../hooks/useToken'
+
 
 
 const SignUp = () => {
@@ -10,8 +12,15 @@ const SignUp = () => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const { SignUp, updateDoctorProfile } = useContext(DoctorContext)
+  const { SignUp, updateDoctorProfile,setLoader } = useContext(DoctorContext)
   const [loginError, setLoginError] = useState('')
+  const navigate = useNavigate()
+
+  const[userCreatedEmail,setUserCreatedeEmail]=useState('')
+  const [token] = useToken(userCreatedEmail)
+  if (token) {
+    navigate('/')
+  }
 
   const handleSignUp = (data) => {
     console.log(data)
@@ -19,13 +28,16 @@ const SignUp = () => {
       .then((result) => {
         const user = result.user
         console.log(user)
-        
+
         setLoginError('')
         const profile = {
           displayName: data.name,
         }
         updateDoctorProfile(profile)
-          .then(() => {})
+          .then(() => {
+            savedUser(data.name, data.email)
+           
+          })
           .catch((e) => {
             console.log(e)
           })
@@ -35,6 +47,26 @@ const SignUp = () => {
         setLoginError(e.message)
       })
   }
+
+  const savedUser = (name, email) => {
+    const user = { name, email }
+    fetch('http://localhost:5000/users', {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        setUserCreatedeEmail(email)
+        setLoader(false)
+        
+      })
+  }
+
+
   return (
     <div className='h-[600px] flex justify-center items-center'>
       <div className='w-96 p-8'>
