@@ -1,14 +1,22 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link, Outlet } from 'react-router-dom'
+import { DoctorContext } from '../context/AuthProvider'
+import useAdmin from '../hooks/useAdmin'
 import Header from '../shared/Header/Header'
 
 const DashBoardLayout = () => {
+  const { user } = useContext(DoctorContext)
+  const [isAdmin] = useAdmin(user?.email)
   return (
     <div>
       <Header></Header>
 
       <div className='drawer drawer-mobile'>
-        <input id='dashBoard-drawer' type='checkbox' className='drawer-toggle' />
+        <input
+          id='dashBoard-drawer'
+          type='checkbox'
+          className='drawer-toggle'
+        />
         <div className='drawer-content'>
           <Outlet></Outlet>
           {/* <label
@@ -24,9 +32,16 @@ const DashBoardLayout = () => {
             <li>
               <Link to='/dashboard'>My Appionments</Link>
             </li>
-            <li>
-              <Link to='/dashboard/allusers'>All Users</Link>
-            </li>
+            {isAdmin && (
+              <>
+                <li>
+                  <Link to='/dashboard/allusers'>All Users</Link>
+                </li>
+                <li>
+                  <Link to='/dashboard/adddoctor'>Add A doctor</Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
