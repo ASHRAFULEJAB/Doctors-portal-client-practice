@@ -28,7 +28,7 @@ const DashBoardLayout = () => {
         </div>
         <div className='drawer-side'>
           <label htmlFor='dashBoard-drawer' className='drawer-overlay'></label>
-          <ul className='menu p-4 w-80 bg-base-100 text-base-content'>
+          <ul className='menu p-4 w-80  text-base-content'>
             <li>
               <Link to='/dashboard'>My Appionments</Link>
             </li>
@@ -39,6 +39,9 @@ const DashBoardLayout = () => {
                 </li>
                 <li>
                   <Link to='/dashboard/adddoctor'>Add A doctor</Link>
+                </li>
+                <li>
+                  <Link to='/dashboard/mangedoctors'>Manage doctor Doctors</Link>
                 </li>
               </>
             )}
