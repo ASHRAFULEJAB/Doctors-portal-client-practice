@@ -4,7 +4,7 @@ import { DoctorContext } from '../../../context/AuthProvider'
 
 const BookingModal = ({ treatment, selectDate, setTreatment, refetch }) => {
   const { user } = useContext(DoctorContext)
-  const { name: treatmentName, slots } = treatment
+  const { name: treatmentName, slots,price } = treatment
   const date = format(selectDate, 'PP')
   const handleBooking = (e) => {
     e.preventDefault()
@@ -20,6 +20,7 @@ const BookingModal = ({ treatment, selectDate, setTreatment, refetch }) => {
       email,
       slot,
       phone,
+      price
     }
     fetch('http://localhost:5000/bookings', {
       method: 'post',

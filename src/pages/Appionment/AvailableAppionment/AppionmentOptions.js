@@ -1,7 +1,7 @@
 import React from 'react'
 
 const AppionmentOptions = ({ options, setTreatment }) => {
-  const { name, slots } = options
+  const { name, slots, price } = options
   return (
     <div className='card shadow-xl'>
       <div className='card-body'>
@@ -12,6 +12,7 @@ const AppionmentOptions = ({ options, setTreatment }) => {
         <p>
           {slots.length} {slots.length > 1 ? 'spaces' : 'space'}
         </p>
+        <p className='font-bold'>${price}</p>
         <div className='card-actions justify-center'>
           {/* <button className='btn btn-primary text-white'>Book An Appionment</button> */}
           <label
