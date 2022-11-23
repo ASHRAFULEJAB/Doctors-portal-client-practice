@@ -52,7 +52,7 @@ const MyAppionments = () => {
                     </Link>
                   )}
                   {
-                    booking?.price && booking?.paid && <h3>Paid</h3>
+                    booking?.price && booking?.paid && <h3 className=' text-green-700 font-bold'>Paid</h3>
                   }
                 </td>
               </tr>
